@@ -7,16 +7,17 @@ import java.util.List;
 
 public class ClienteDAO {
     private Conexao conexao;
+    private Connection connection;
 
     public ClienteDAO() {
         this.conexao = new Conexao();
+        this.connection = conexao.getConnection();  
     }
 
     // Create
     public void create(Cliente cliente) {
         String sql = "INSERT INTO Cliente (nome, telefone, email) VALUES (?, ?, ?)";
-        try (Connection conn = conexao.getConnection();
-             PreparedStatement pst = conn.prepareStatement(sql)) {
+        try (PreparedStatement pst = connection.prepareStatement(sql)) {  
             pst.setString(1, cliente.getNome());
             pst.setString(2, cliente.getTelefone());
             pst.setString(3, cliente.getEmail());
@@ -29,8 +30,7 @@ public class ClienteDAO {
     // Update
     public void update(Cliente cliente) {
         String sql = "UPDATE Cliente SET nome = ?, telefone = ?, email = ? WHERE id = ?";
-        try (Connection conn = conexao.getConnection();
-             PreparedStatement pst = conn.prepareStatement(sql)) {
+        try (PreparedStatement pst = connection.prepareStatement(sql)) {  
             pst.setString(1, cliente.getNome());
             pst.setString(2, cliente.getTelefone());
             pst.setString(3, cliente.getEmail());
@@ -44,8 +44,7 @@ public class ClienteDAO {
     // Delete
     public void delete(int id) {
         String sql = "DELETE FROM Cliente WHERE id = ?";
-        try (Connection conn = conexao.getConnection();
-             PreparedStatement pst = conn.prepareStatement(sql)) {
+        try (PreparedStatement pst = connection.prepareStatement(sql)) {  
             pst.setInt(1, id);
             pst.executeUpdate();
         } catch (SQLException ex) {
@@ -57,8 +56,7 @@ public class ClienteDAO {
     public Cliente find(int id) {
         String sql = "SELECT * FROM Cliente WHERE id = ?";
         Cliente cliente = null;
-        try (Connection conn = conexao.getConnection();
-             PreparedStatement pst = conn.prepareStatement(sql)) {
+        try (PreparedStatement pst = connection.prepareStatement(sql)) {  
             pst.setInt(1, id);
             ResultSet rs = pst.executeQuery();
             if (rs.next()) {
@@ -78,9 +76,8 @@ public class ClienteDAO {
     public List<Cliente> findAll() {
         String sql = "SELECT * FROM Cliente";
         List<Cliente> clientes = new ArrayList<>();
-        try (Connection conn = conexao.getConnection();
-             PreparedStatement pst = conn.prepareStatement(sql);
-             ResultSet rs = pst.executeQuery()) {
+        try (PreparedStatement pst = connection.prepareStatement(sql);
+             ResultSet rs = pst.executeQuery()) {  
             while (rs.next()) {
                 Cliente cliente = new Cliente();
                 cliente.setId(rs.getInt("id"));
@@ -94,4 +91,5 @@ public class ClienteDAO {
         }
         return clientes;
     }
+
 }

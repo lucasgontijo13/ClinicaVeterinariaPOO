@@ -7,16 +7,17 @@ import java.util.List;
 
 public class VeterinarioDAO {
     private Conexao conexao;
+    private Connection connection;
 
     public VeterinarioDAO() {
         this.conexao = new Conexao();
+        this.connection = conexao.getConnection();  // Conexão estabelecida uma vez aqui
     }
 
     // Create
     public void create(Veterinario veterinario) {
         String sql = "INSERT INTO Veterinario (nome, especializacao, telefone) VALUES (?, ?, ?)";
-        try (Connection conn = conexao.getConnection();
-             PreparedStatement pst = conn.prepareStatement(sql)) {
+        try (PreparedStatement pst = connection.prepareStatement(sql)) {
             pst.setString(1, veterinario.getNome());
             pst.setString(2, veterinario.getEspecializacao());
             pst.setString(3, veterinario.getTelefone());
@@ -29,8 +30,7 @@ public class VeterinarioDAO {
     // Update
     public void update(Veterinario veterinario) {
         String sql = "UPDATE Veterinario SET nome = ?, especializacao = ?, telefone = ? WHERE id = ?";
-        try (Connection conn = conexao.getConnection();
-             PreparedStatement pst = conn.prepareStatement(sql)) {
+        try (PreparedStatement pst = connection.prepareStatement(sql)) {
             pst.setString(1, veterinario.getNome());
             pst.setString(2, veterinario.getEspecializacao());
             pst.setString(3, veterinario.getTelefone());
@@ -44,8 +44,7 @@ public class VeterinarioDAO {
     // Delete
     public void delete(int id) {
         String sql = "DELETE FROM Veterinario WHERE id = ?";
-        try (Connection conn = conexao.getConnection();
-             PreparedStatement pst = conn.prepareStatement(sql)) {
+        try (PreparedStatement pst = connection.prepareStatement(sql)) {
             pst.setInt(1, id);
             pst.executeUpdate();
         } catch (SQLException ex) {
@@ -57,8 +56,7 @@ public class VeterinarioDAO {
     public Veterinario find(int id) {
         String sql = "SELECT * FROM Veterinario WHERE id = ?";
         Veterinario veterinario = null;
-        try (Connection conn = conexao.getConnection();
-             PreparedStatement pst = conn.prepareStatement(sql)) {
+        try (PreparedStatement pst = connection.prepareStatement(sql)) {
             pst.setInt(1, id);
             ResultSet rs = pst.executeQuery();
             if (rs.next()) {
@@ -78,8 +76,7 @@ public class VeterinarioDAO {
     public List<Veterinario> findAll() {
         String sql = "SELECT * FROM Veterinario";
         List<Veterinario> veterinarios = new ArrayList<>();
-        try (Connection conn = conexao.getConnection();
-             PreparedStatement pst = conn.prepareStatement(sql);
+        try (PreparedStatement pst = connection.prepareStatement(sql);
              ResultSet rs = pst.executeQuery()) {
             while (rs.next()) {
                 Veterinario veterinario = new Veterinario();

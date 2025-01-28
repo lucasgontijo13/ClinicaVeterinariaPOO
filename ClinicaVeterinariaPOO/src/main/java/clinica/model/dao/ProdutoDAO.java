@@ -7,16 +7,17 @@ import java.util.List;
 
 public class ProdutoDAO {
     private Conexao conexao;
+    private Connection connection;
 
     public ProdutoDAO() {
         this.conexao = new Conexao();
+        this.connection = conexao.getConnection();  // Conexão estabelecida uma vez aqui
     }
 
     // Create
     public void create(Produto produto) {
         String sql = "INSERT INTO Produto (nome, descricao, preco) VALUES (?, ?, ?)";
-        try (Connection conn = conexao.getConnection();
-             PreparedStatement pst = conn.prepareStatement(sql)) {
+        try (PreparedStatement pst = connection.prepareStatement(sql)) {
             pst.setString(1, produto.getNome());
             pst.setString(2, produto.getDescricao());
             pst.setFloat(3, produto.getPreco());
@@ -29,8 +30,7 @@ public class ProdutoDAO {
     // Update
     public void update(Produto produto) {
         String sql = "UPDATE Produto SET nome = ?, descricao = ?, preco = ? WHERE id = ?";
-        try (Connection conn = conexao.getConnection();
-             PreparedStatement pst = conn.prepareStatement(sql)) {
+        try (PreparedStatement pst = connection.prepareStatement(sql)) {
             pst.setString(1, produto.getNome());
             pst.setString(2, produto.getDescricao());
             pst.setFloat(3, produto.getPreco());
@@ -44,8 +44,7 @@ public class ProdutoDAO {
     // Delete
     public void delete(int id) {
         String sql = "DELETE FROM Produto WHERE id = ?";
-        try (Connection conn = conexao.getConnection();
-             PreparedStatement pst = conn.prepareStatement(sql)) {
+        try (PreparedStatement pst = connection.prepareStatement(sql)) {
             pst.setInt(1, id);
             pst.executeUpdate();
         } catch (SQLException ex) {
@@ -57,8 +56,7 @@ public class ProdutoDAO {
     public Produto find(int id) {
         String sql = "SELECT * FROM Produto WHERE id = ?";
         Produto produto = null;
-        try (Connection conn = conexao.getConnection();
-             PreparedStatement pst = conn.prepareStatement(sql)) {
+        try (PreparedStatement pst = connection.prepareStatement(sql)) {
             pst.setInt(1, id);
             ResultSet rs = pst.executeQuery();
             if (rs.next()) {
@@ -78,8 +76,7 @@ public class ProdutoDAO {
     public List<Produto> findAll() {
         String sql = "SELECT * FROM Produto";
         List<Produto> produtos = new ArrayList<>();
-        try (Connection conn = conexao.getConnection();
-             PreparedStatement pst = conn.prepareStatement(sql);
+        try (PreparedStatement pst = connection.prepareStatement(sql);
              ResultSet rs = pst.executeQuery()) {
             while (rs.next()) {
                 Produto produto = new Produto();

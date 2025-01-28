@@ -1,16 +1,15 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package clinica.model.entity;
-import java.util.*;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
- *
- * @author lucas
+ * Classe de entidade Consulta.
  */
 public class Consulta {
     private int id;
-    private Date data;
+    private LocalDateTime dataHora; // Alterado para LocalDateTime
     private Pet pet;
     private Veterinario veterinario;
     private String descricao;
@@ -26,12 +25,12 @@ public class Consulta {
         this.id = id;
     }
 
-    public Date getData() {
-        return data;
+    public LocalDateTime getDateTime() { // Alterado para LocalDateTime
+        return dataHora;
     }
 
-    public void setData(Date data) {
-        this.data = data;
+    public void setDateTime(LocalDateTime dataHora) { // Alterado para LocalDateTime
+        this.dataHora = dataHora;
     }
 
     public Pet getPet() {
@@ -73,4 +72,6 @@ public class Consulta {
     public void addServico(Servico servico) {
         this.servicos.add(servico);
     }
+
+
 }

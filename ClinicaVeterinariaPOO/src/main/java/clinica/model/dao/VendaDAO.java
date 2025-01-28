@@ -8,16 +8,17 @@ import java.util.List;
 
 public class VendaDAO {
     private Conexao conexao;
+    private Connection connection;
 
     public VendaDAO() {
         this.conexao = new Conexao();
+        this.connection = conexao.getConnection();  // Conexão estabelecida uma vez aqui
     }
 
     // Create
     public void create(Venda venda) {
         String sql = "INSERT INTO Venda (data, produto_id, quantidade, forma_pagamento) VALUES (?, ?, ?, ?)";
-        try (Connection conn = conexao.getConnection();
-             PreparedStatement pst = conn.prepareStatement(sql)) {
+        try (PreparedStatement pst = connection.prepareStatement(sql)) {
             pst.setTimestamp(1, new Timestamp(venda.getData().getTime()));
             pst.setInt(2, venda.getProduto().getId());
             pst.setInt(3, venda.getQuantidade());
@@ -31,8 +32,7 @@ public class VendaDAO {
     // Update
     public void update(Venda venda) {
         String sql = "UPDATE Venda SET data = ?, produto_id = ?, quantidade = ?, forma_pagamento = ? WHERE id = ?";
-        try (Connection conn = conexao.getConnection();
-             PreparedStatement pst = conn.prepareStatement(sql)) {
+        try (PreparedStatement pst = connection.prepareStatement(sql)) {
             pst.setTimestamp(1, new Timestamp(venda.getData().getTime()));
             pst.setInt(2, venda.getProduto().getId());
             pst.setInt(3, venda.getQuantidade());
@@ -47,8 +47,7 @@ public class VendaDAO {
     // Delete
     public void delete(int id) {
         String sql = "DELETE FROM Venda WHERE id = ?";
-        try (Connection conn = conexao.getConnection();
-             PreparedStatement pst = conn.prepareStatement(sql)) {
+        try (PreparedStatement pst = connection.prepareStatement(sql)) {
             pst.setInt(1, id);
             pst.executeUpdate();
         } catch (SQLException ex) {
@@ -60,8 +59,7 @@ public class VendaDAO {
     public Venda find(int id) {
         String sql = "SELECT * FROM Venda WHERE id = ?";
         Venda venda = null;
-        try (Connection conn = conexao.getConnection();
-             PreparedStatement pst = conn.prepareStatement(sql)) {
+        try (PreparedStatement pst = connection.prepareStatement(sql)) {
             pst.setInt(1, id);
             ResultSet rs = pst.executeQuery();
             if (rs.next()) {
@@ -83,8 +81,7 @@ public class VendaDAO {
     public List<Venda> findAll() {
         String sql = "SELECT * FROM Venda";
         List<Venda> vendas = new ArrayList<>();
-        try (Connection conn = conexao.getConnection();
-             PreparedStatement pst = conn.prepareStatement(sql);
+        try (PreparedStatement pst = connection.prepareStatement(sql);
              ResultSet rs = pst.executeQuery()) {
             while (rs.next()) {
                 Venda venda = new Venda();
