@@ -142,6 +142,34 @@ public class ServicoDAO {
 
         return servicos;
     }
+    
+    public List<Servico> buscarServicosPorConsultaId(int consultaId) {
+        String sql = "SELECT s.id, s.nome, s.descricao, s.preco FROM servico s " +
+                     "JOIN ConsultaServico cs ON s.id = cs.servico_id " +
+                     "WHERE cs.consulta_id = ?";
+        List<Servico> servicos = new ArrayList<>();
+
+        try (Connection connection = conexao.getConnection(); 
+             PreparedStatement stmt = connection.prepareStatement(sql)) {
+
+            stmt.setInt(1, consultaId);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Servico servico = new Servico();
+                servico.setId(rs.getInt("id"));
+                servico.setNome(rs.getString("nome"));
+                servico.setDescricao(rs.getString("descricao"));
+                servico.setPreco(rs.getFloat("preco"));
+                servicos.add(servico);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return servicos;
+    }
+
 
     // Listar Todos os Serviços
     public List<Servico> listarTodos() {

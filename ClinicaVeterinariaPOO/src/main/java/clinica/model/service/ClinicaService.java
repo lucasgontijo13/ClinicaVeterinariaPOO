@@ -163,7 +163,12 @@ public class ClinicaService {
     public List<Servico> buscarServicoPorFaixaDePreco(float precoMinimo, float precoMaximo) {
         return servicoDAO.buscarPorFaixaDePreco(precoMinimo, precoMaximo);
     }
- 
+    
+    public List<Servico> buscarServicosPorConsultaId(int consultaId) {
+        return servicoDAO.buscarServicosPorConsultaId(consultaId);
+    }
+
+    
     public List<Servico> listarTodosServicos() {
         return servicoDAO.listarTodos();
     }

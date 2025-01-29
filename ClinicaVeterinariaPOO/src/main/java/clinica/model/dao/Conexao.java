@@ -9,8 +9,8 @@ import java.util.logging.Logger;
 public class Conexao {
     private static final String URL_MYSQL = "jdbc:mysql://localhost:3306/clinicaveterinariadb";
     private static final String DRIVER_MYSQL = "com.mysql.cj.jdbc.Driver";
-    private static final String USER = "";  // Substitua se necessário
-    private static final String PASS = "";  // Substitua pela senha do seu banco de dados
+    private static final String USER = "root";  // Substitua se necessário
+    private static final String PASS = "admin123";  // Substitua pela senha do seu banco de dados
 
     private Connection connection;
 

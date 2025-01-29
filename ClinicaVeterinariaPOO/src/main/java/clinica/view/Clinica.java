@@ -894,67 +894,82 @@ public class Clinica {
     }
 
     private static void consultarServico() {
-    System.out.println("*** Opções de Consulta de Serviço ***");
-    System.out.println("1 - Consultar por ID");
-    System.out.println("2 - Consultar por Nome (parcial)");
-    System.out.println("3 - Consultar por Faixa de Preço");
-    System.out.println("4 - Mostrar Todos os Serviços");
-    System.out.print("Escolha uma opção: ");
-    int opcao = scanner.nextInt();
-    scanner.nextLine(); // Limpar buffer após o número
+        System.out.println("*** Opções de Consulta de Serviço ***");
+        System.out.println("1 - Consultar por ID");
+        System.out.println("2 - Consultar por Nome (parcial)");
+        System.out.println("3 - Consultar por Faixa de Preço");
+        System.out.println("4 - Consultar Serviços por ID da Consulta");
+        System.out.println("5 - Mostrar Todos os Serviços");
+        System.out.print("Escolha uma opção: ");
+        int opcao = scanner.nextInt();
+        scanner.nextLine(); // Limpar buffer após o número
 
-    switch (opcao) {
-        case 1:
-            System.out.print("Informe o ID do Serviço para consultar: ");
-            int id = scanner.nextInt();
-            Servico servicoPorId = clinicaService.buscarServicoPorId(id);
-            exibirServico(servicoPorId); // Exibe o serviço consultado
-            break;
-        
-        case 2:
-            System.out.print("Informe o Nome (ou parte do nome) do Serviço para consultar: ");
-            String nome = scanner.nextLine();
-            List<Servico> servicosPorNome = clinicaService.buscarServicoPorNome(nome);
-            if (servicosPorNome.isEmpty()) {
-                System.out.println("Nenhum serviço encontrado com esse nome.");
-            } else {
-                for (Servico servico : servicosPorNome) {
-                    exibirServico(servico); // Exibe todos os serviços encontrados
-                }
-            }
-            break;
-        
-        case 3:
-            System.out.print("Informe o preço mínimo: ");
-            float precoMinimo = scanner.nextFloat();
-            System.out.print("Informe o preço máximo: ");
-            float precoMaximo = scanner.nextFloat();
-            List<Servico> servicosPorFaixaDePreco = clinicaService.buscarServicoPorFaixaDePreco(precoMinimo, precoMaximo);
-            if (servicosPorFaixaDePreco.isEmpty()) {
-                System.out.println("Nenhum serviço encontrado nesse intervalo de preço.");
-            } else {
-                for (Servico servico : servicosPorFaixaDePreco) {
-                    exibirServico(servico); // Exibe todos os serviços encontrados
-                }
-            }
-            break;
-        
-        case 4:
-            List<Servico> todosServicos = clinicaService.listarTodosServicos();
-            if (todosServicos.isEmpty()) {
-                System.out.println("Nenhum serviço cadastrado.");
-            } else {
-                for (Servico servico : todosServicos) {
-                    exibirServico(servico); // Exibe todos os serviços cadastrados
-                }
-            }
-            break;
+        switch (opcao) {
+            case 1:
+                System.out.print("Informe o ID do Serviço para consultar: ");
+                int id = scanner.nextInt();
+                Servico servicoPorId = clinicaService.buscarServicoPorId(id);
+                exibirServico(servicoPorId); // Exibe o serviço consultado
+                break;
 
-        default:
-            System.out.println("Opção inválida! Tente novamente.");
-            break;
+            case 2:
+                System.out.print("Informe o Nome (ou parte do nome) do Serviço para consultar: ");
+                String nome = scanner.nextLine();
+                List<Servico> servicosPorNome = clinicaService.buscarServicoPorNome(nome);
+                if (servicosPorNome.isEmpty()) {
+                    System.out.println("Nenhum serviço encontrado com esse nome.");
+                } else {
+                    for (Servico servico : servicosPorNome) {
+                        exibirServico(servico); // Exibe todos os serviços encontrados
+                    }
+                }
+                break;
+
+            case 3:
+                System.out.print("Informe o preço mínimo: ");
+                float precoMinimo = scanner.nextFloat();
+                System.out.print("Informe o preço máximo: ");
+                float precoMaximo = scanner.nextFloat();
+                List<Servico> servicosPorFaixaDePreco = clinicaService.buscarServicoPorFaixaDePreco(precoMinimo, precoMaximo);
+                if (servicosPorFaixaDePreco.isEmpty()) {
+                    System.out.println("Nenhum serviço encontrado nesse intervalo de preço.");
+                } else {
+                    for (Servico servico : servicosPorFaixaDePreco) {
+                        exibirServico(servico); // Exibe todos os serviços encontrados
+                    }
+                }
+                break;
+
+            case 4:
+                System.out.print("Informe o ID da Consulta para consultar os serviços relacionados: ");
+                int consultaId = scanner.nextInt();
+                List<Servico> servicosDaConsulta = clinicaService.buscarServicosPorConsultaId(consultaId);
+                if (servicosDaConsulta.isEmpty()) {
+                    System.out.println("Nenhum serviço encontrado para essa consulta.");
+                } else {
+                    for (Servico servico : servicosDaConsulta) {
+                        exibirServico(servico); // Exibe os serviços encontrados para a consulta
+                    }
+                }
+                break;
+
+            case 5:
+                List<Servico> todosServicos = clinicaService.listarTodosServicos();
+                if (todosServicos.isEmpty()) {
+                    System.out.println("Nenhum serviço cadastrado.");
+                } else {
+                    for (Servico servico : todosServicos) {
+                        exibirServico(servico); // Exibe todos os serviços cadastrados
+                    }
+                }
+                break;
+
+            default:
+                System.out.println("Opção inválida! Tente novamente.");
+                break;
+        }
     }
-}
+
 
     private static void exibirServico(Servico servico) {
         if (servico != null) {
