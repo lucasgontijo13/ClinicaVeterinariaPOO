@@ -1,7 +1,6 @@
 C:\Users\lucas\Documents\NetBeansProjects\ClinicaVeterinariaPOO\src\main\java\clinica\model\dao\ClienteDAO.java
 C:\Users\lucas\Documents\NetBeansProjects\ClinicaVeterinariaPOO\src\main\java\clinica\model\dao\Conexao.java
 C:\Users\lucas\Documents\NetBeansProjects\ClinicaVeterinariaPOO\src\main\java\clinica\model\dao\ConsultaDAO.java
-C:\Users\lucas\Documents\NetBeansProjects\ClinicaVeterinariaPOO\src\main\java\clinica\model\dao\PagamentoDAO.java
 C:\Users\lucas\Documents\NetBeansProjects\ClinicaVeterinariaPOO\src\main\java\clinica\model\dao\PetDAO.java
 C:\Users\lucas\Documents\NetBeansProjects\ClinicaVeterinariaPOO\src\main\java\clinica\model\dao\ProdutoDAO.java
 C:\Users\lucas\Documents\NetBeansProjects\ClinicaVeterinariaPOO\src\main\java\clinica\model\dao\ServicoDAO.java
@@ -9,7 +8,6 @@ C:\Users\lucas\Documents\NetBeansProjects\ClinicaVeterinariaPOO\src\main\java\cl
 C:\Users\lucas\Documents\NetBeansProjects\ClinicaVeterinariaPOO\src\main\java\clinica\model\dao\VeterinarioDAO.java
 C:\Users\lucas\Documents\NetBeansProjects\ClinicaVeterinariaPOO\src\main\java\clinica\model\entity\Cliente.java
 C:\Users\lucas\Documents\NetBeansProjects\ClinicaVeterinariaPOO\src\main\java\clinica\model\entity\Consulta.java
-C:\Users\lucas\Documents\NetBeansProjects\ClinicaVeterinariaPOO\src\main\java\clinica\model\entity\Pagamento.java
 C:\Users\lucas\Documents\NetBeansProjects\ClinicaVeterinariaPOO\src\main\java\clinica\model\entity\Pet.java
 C:\Users\lucas\Documents\NetBeansProjects\ClinicaVeterinariaPOO\src\main\java\clinica\model\entity\Produto.java
 C:\Users\lucas\Documents\NetBeansProjects\ClinicaVeterinariaPOO\src\main\java\clinica\model\entity\Servico.java

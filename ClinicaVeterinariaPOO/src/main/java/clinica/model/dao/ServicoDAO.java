@@ -1,6 +1,5 @@
 package clinica.model.dao;
 
-import clinica.model.entity.Consulta;
 import clinica.model.entity.Servico;
 import java.sql.*;
 import java.util.ArrayList;
@@ -8,130 +7,163 @@ import java.util.List;
 
 public class ServicoDAO {
     private Conexao conexao;
-    private Connection connection;
 
+    // Construtor da classe
     public ServicoDAO() {
-        this.conexao = new Conexao();
-        this.connection = conexao.getConnection();  // Conexão estabelecida uma vez aqui
+        this.conexao = new Conexao(); // Inicializando a classe Conexao
     }
 
-    // Create
-    public void create(Servico servico) {
-        String sql = "INSERT INTO Servico (nome, descricao, preco) VALUES (?, ?, ?)";
-        try (PreparedStatement pst = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            pst.setString(1, servico.getNome());
-            pst.setString(2, servico.getDescricao());
-            pst.setFloat(3, servico.getPreco());
-            pst.executeUpdate();
+    // Método para salvar um novo serviço
+    public void salvar(Servico servico) {
+        String sql = "INSERT INTO servico (nome, descricao, preco) VALUES (?, ?, ?)";
 
-            // Obter o ID gerado
-            ResultSet rs = pst.getGeneratedKeys();
+        try (Connection connection = conexao.getConnection(); // Obtendo a conexão
+             PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+            stmt.setString(1, servico.getNome());
+            stmt.setString(2, servico.getDescricao());
+            stmt.setFloat(3, servico.getPreco());
+
+            stmt.executeUpdate();
+
+            ResultSet rs = stmt.getGeneratedKeys();
             if (rs.next()) {
-                servico.setId(rs.getInt(1));
+                servico.setId(rs.getInt(1)); // Definir o ID gerado
             }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
-    // Update
-    public void update(Servico servico) {
-        String sql = "UPDATE Servico SET nome = ?, descricao = ?, preco = ? WHERE id = ?";
-        try (PreparedStatement pst = connection.prepareStatement(sql)) {
-            pst.setString(1, servico.getNome());
-            pst.setString(2, servico.getDescricao());
-            pst.setFloat(3, servico.getPreco());
-            pst.setInt(4, servico.getId());
-            pst.executeUpdate();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
+    // Método para atualizar um serviço existente
+    public void atualizar(Servico servico) {
+        String sql = "UPDATE servico SET nome = ?, descricao = ?, preco = ? WHERE id = ?";
+
+        try (Connection connection = conexao.getConnection(); // Obtendo a conexão
+             PreparedStatement stmt = connection.prepareStatement(sql)) {
+
+            stmt.setString(1, servico.getNome());
+            stmt.setString(2, servico.getDescricao());
+            stmt.setFloat(3, servico.getPreco());
+            stmt.setInt(4, servico.getId());
+
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
-    // Delete
-    public void delete(int id) {
-        String sql = "DELETE FROM Servico WHERE id = ?";
-        try (PreparedStatement pst = connection.prepareStatement(sql)) {
-            pst.setInt(1, id);
-            pst.executeUpdate();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
+    // Método para excluir um serviço
+    public void excluir(int id) {
+        String sql = "DELETE FROM servico WHERE id = ?";
+
+        try (Connection connection = conexao.getConnection(); // Obtendo a conexão
+             PreparedStatement stmt = connection.prepareStatement(sql)) {
+
+            stmt.setInt(1, id);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
-    // Add Consulta a um Servico
-    public void addConsulta(int servicoId, int consultaId) {
-        String sql = "INSERT INTO Servico_Consulta (servico_id, consulta_id) VALUES (?, ?)";
-        try (PreparedStatement pst = connection.prepareStatement(sql)) {
-            pst.setInt(1, servicoId);
-            pst.setInt(2, consultaId);
-            pst.executeUpdate();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    // Find by ID (com Consultas associadas)
-    public Servico find(int id) {
-        String sql = "SELECT * FROM Servico WHERE id = ?";
+    // Método para buscar um serviço por ID
+    public Servico buscarPorId(int id) {
+        String sql = "SELECT * FROM servico WHERE id = ?";
         Servico servico = null;
-        try (PreparedStatement pst = connection.prepareStatement(sql)) {
-            pst.setInt(1, id);
-            ResultSet rs = pst.executeQuery();
+
+        try (Connection connection = conexao.getConnection(); // Obtendo a conexão
+             PreparedStatement stmt = connection.prepareStatement(sql)) {
+
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+
             if (rs.next()) {
                 servico = new Servico();
                 servico.setId(rs.getInt("id"));
                 servico.setNome(rs.getString("nome"));
                 servico.setDescricao(rs.getString("descricao"));
                 servico.setPreco(rs.getFloat("preco"));
-                servico.setConsultas(findConsultasByServicoId(id)); // Buscar consultas associadas
             }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
+
         return servico;
     }
 
-    // Encontrar todas as Consultas associadas a um Serviço
-    private List<Consulta> findConsultasByServicoId(int servicoId) {
-        String sql = "SELECT c.* FROM Consulta c " +
-                     "INNER JOIN Servico_Consulta sc ON c.id = sc.consulta_id " +
-                     "WHERE sc.servico_id = ?";
-        List<Consulta> consultas = new ArrayList<>();
-        try (PreparedStatement pst = connection.prepareStatement(sql)) {
-            pst.setInt(1, servicoId);
-            ResultSet rs = pst.executeQuery();
-            while (rs.next()) {
-                Consulta consulta = new Consulta();
-                consulta.setId(rs.getInt("id"));
-                consulta.setDateTime(rs.getTimestamp("data_horario").toLocalDateTime()); // Alterado para DateTime
-                // Outros atributos da consulta
-                consultas.add(consulta);
-            }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-        return consultas;
-    }
 
-    // Find all (com Consultas associadas)
-    public List<Servico> findAll() {
-        String sql = "SELECT * FROM Servico";
+
+    // Buscar Serviço por Nome (parcial)
+    public List<Servico> buscarPorNome(String nome) {
+        String sql = "SELECT * FROM servico WHERE nome LIKE ?";
         List<Servico> servicos = new ArrayList<>();
-        try (PreparedStatement pst = connection.prepareStatement(sql);
-             ResultSet rs = pst.executeQuery()) {
+
+        try (PreparedStatement stmt = conexao.getConnection().prepareStatement(sql)) {
+            stmt.setString(1, "%" + nome + "%");
+            ResultSet rs = stmt.executeQuery();
+
             while (rs.next()) {
                 Servico servico = new Servico();
                 servico.setId(rs.getInt("id"));
                 servico.setNome(rs.getString("nome"));
                 servico.setDescricao(rs.getString("descricao"));
                 servico.setPreco(rs.getFloat("preco"));
-                servico.setConsultas(findConsultasByServicoId(servico.getId())); // Buscar consultas associadas
                 servicos.add(servico);
             }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
+
         return servicos;
     }
+
+    // Buscar Serviço por Faixa de Preço
+    public List<Servico> buscarPorFaixaDePreco(float precoMinimo, float precoMaximo) {
+        String sql = "SELECT * FROM servico WHERE preco BETWEEN ? AND ?";
+        List<Servico> servicos = new ArrayList<>();
+
+        try (PreparedStatement stmt = conexao.getConnection().prepareStatement(sql)) {
+            stmt.setFloat(1, precoMinimo);
+            stmt.setFloat(2, precoMaximo);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Servico servico = new Servico();
+                servico.setId(rs.getInt("id"));
+                servico.setNome(rs.getString("nome"));
+                servico.setDescricao(rs.getString("descricao"));
+                servico.setPreco(rs.getFloat("preco"));
+                servicos.add(servico);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return servicos;
+    }
+
+    // Listar Todos os Serviços
+    public List<Servico> listarTodos() {
+        String sql = "SELECT * FROM servico";
+        List<Servico> servicos = new ArrayList<>();
+
+        try (Statement stmt = conexao.getConnection().createStatement()) {
+            ResultSet rs = stmt.executeQuery(sql);
+
+            while (rs.next()) {
+                Servico servico = new Servico();
+                servico.setId(rs.getInt("id"));
+                servico.setNome(rs.getString("nome"));
+                servico.setDescricao(rs.getString("descricao"));
+                servico.setPreco(rs.getFloat("preco"));
+                servicos.add(servico);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return servicos;
+    }
+
 }

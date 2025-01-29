@@ -1,7 +1,8 @@
 package clinica.model.entity;
 
-import java.time.LocalDateTime;
+
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -9,12 +10,13 @@ import java.util.List;
  */
 public class Consulta {
     private int id;
-    private LocalDateTime dataHora; // Alterado para LocalDateTime
+    private Date dataHora; 
     private Pet pet;
     private Veterinario veterinario;
     private String descricao;
-    private Pagamento pagamento;
     private List<Servico> servicos = new ArrayList<>();
+    private String formaPagamento; // Novo campo
+    private double valorPraticado; // Novo campo
 
     // Getters e Setters
     public int getId() {
@@ -25,11 +27,11 @@ public class Consulta {
         this.id = id;
     }
 
-    public LocalDateTime getDateTime() { // Alterado para LocalDateTime
+    public Date getDateTime() { 
         return dataHora;
     }
 
-    public void setDateTime(LocalDateTime dataHora) { // Alterado para LocalDateTime
+    public void setDateTime(Date dataHora) {
         this.dataHora = dataHora;
     }
 
@@ -57,14 +59,6 @@ public class Consulta {
         this.descricao = descricao;
     }
 
-    public Pagamento getPagamento() {
-        return pagamento;
-    }
-
-    public void setPagamento(Pagamento pagamento) {
-        this.pagamento = pagamento;
-    }
-
     public List<Servico> getServicos() {
         return servicos;
     }
@@ -73,5 +67,25 @@ public class Consulta {
         this.servicos.add(servico);
     }
 
+    public String getFormaPagamento() { // Getter do novo campo
+        return formaPagamento;
+    }
 
+    public void setFormaPagamento(String formaPagamento) { // Setter do novo campo
+        this.formaPagamento = formaPagamento;
+    }
+
+    public double getValorPraticado() { // Getter do novo campo
+        return valorPraticado;
+    }
+
+    public void setValorPraticado(double valorPraticado) { // Setter do novo campo
+        this.valorPraticado = valorPraticado;
+    }
+    
+    public void limparServicos() {
+        if (servicos != null) {
+            servicos.clear();  // Limpa todos os serviços da consulta
+        }
+    }
 }

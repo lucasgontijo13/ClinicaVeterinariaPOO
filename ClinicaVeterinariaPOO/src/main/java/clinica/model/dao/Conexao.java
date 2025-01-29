@@ -7,7 +7,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Conexao {
-    private static final String URL_MYSQL = "jdbc:mysql://localhost:3306/clinicaveterinariadb?useSSL=false&serverTimezone=UTC";
+    private static final String URL_MYSQL = "jdbc:mysql://localhost:3306/clinicaveterinariadb";
     private static final String DRIVER_MYSQL = "com.mysql.cj.jdbc.Driver";
     private static final String USER = "";  // Substitua se necessário
     private static final String PASS = "";  // Substitua pela senha do seu banco de dados
@@ -15,7 +15,7 @@ public class Conexao {
     private Connection connection;
 
     public Connection getConnection() {
-        System.out.println("Conectando ao Banco de Dados PetShopDB...");
+       
         try {
             Class.forName(DRIVER_MYSQL);  // Carrega o driver do MySQL
         } catch (ClassNotFoundException ex) {
@@ -23,7 +23,6 @@ public class Conexao {
         }
         try {
             connection = DriverManager.getConnection(URL_MYSQL, USER, PASS);
-            System.out.println("Conexão estabelecida com sucesso.");
         } catch (SQLException ex) {
             Logger.getLogger(Conexao.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -8,11 +8,7 @@ public class Servico {
     private String nome;
     private String descricao;
     private float preco;
-    private List<Consulta> consultas; // Relação N para N com Consulta
-
-    public Servico() {
-        this.consultas = new ArrayList<>(); // Inicializa a lista para evitar NullPointerException
-    }
+    private List<Consulta> consultas = new ArrayList<>(); // Lista de consultas associadas ao serviço
 
     // Getters e Setters
     public int getId() {
@@ -51,14 +47,7 @@ public class Servico {
         return consultas;
     }
 
-    public void setConsultas(List<Consulta> consultas) {
-        this.consultas = consultas;
-    }
-
-    // Adicionar uma consulta à lista
     public void addConsulta(Consulta consulta) {
-        if (consulta != null && !consultas.contains(consulta)) {
-            this.consultas.add(consulta);
-        }
+        this.consultas.add(consulta);
     }
 }

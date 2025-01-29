@@ -6,8 +6,10 @@ public class Venda {
     private int id;
     private Date data;
     private Produto produto;
+    private Cliente cliente; 
     private int quantidade;
-    private String formaPagamento;  // Novo campo para a forma de pagamento
+    private String formaPagamento;
+    private double valorPraticado;  
 
     // Getters e Setters
     public int getId() {
@@ -34,6 +36,14 @@ public class Venda {
         this.produto = produto;
     }
 
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
+
     public int getQuantidade() {
         return quantidade;
     }
@@ -48,5 +58,13 @@ public class Venda {
 
     public void setFormaPagamento(String formaPagamento) {
         this.formaPagamento = formaPagamento;
+    }
+
+    public double getValorPraticado() {
+        return valorPraticado;
+    }
+
+    public void setValorPraticado(double valorPraticado) {
+        this.valorPraticado = valorPraticado;
     }
 }
