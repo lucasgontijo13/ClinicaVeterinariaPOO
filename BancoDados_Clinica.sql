@@ -121,7 +121,6 @@ COLLATE = utf8mb4_0900_ai_ci;
 CREATE TABLE IF NOT EXISTS `clinicaveterinariadb`.`consultaservico` (
   `consulta_id` INT NOT NULL,
   `servico_id` INT NOT NULL,
-  PRIMARY KEY (`consulta_id`, `servico_id`),
   INDEX `servico_id` (`servico_id` ASC) VISIBLE,
   CONSTRAINT `consultaservico_ibfk_1`
     FOREIGN KEY (`consulta_id`)
